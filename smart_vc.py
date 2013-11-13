@@ -29,6 +29,8 @@ def recursive_vertex_cover(input_graph, assignment):
         for j in range(i+1, len(input_graph[i])):
             if input_graph[i][j] and assignment[i]==None and assignment[j]==None:
                 # u and v connect, therefore do 3-way branch
+                if not u==None: # if we found an appropriate pair, don't keep looking
+                    continue
                 u = i
                 v = j
     if u==None:
@@ -39,14 +41,10 @@ def recursive_vertex_cover(input_graph, assignment):
             for j in range(len(input_graph)): # j is the index of the neighbor we are checking.
                 if input_graph[i][j] == 0: # no edge betw Vtx and Neighbor
                     continue
-                num_neighbors += 1
-                if assignment[j] == 1: # There is an edge and it is covered by Neighbor
-                    assignment[i] = 0
-            if assignment[i] == None: # Vtx remains unassigned after checking all Neighbors
-                if num_neighbors == 0:
-                    assignment[i] = 0
-                else:
+                if assignment[j] == 0: # There is an edge and it is UNcovered by Neighbor
                     assignment[i] = 1
+            if assignment[i] == None: # Vtx remains unassigned because all edges IF PRESENT are covered
+                assignment[i] = 0
         return sum(assignment)
     # END OF YOUR CODE. The following code takes care of the recursive
     # branching. Do not modify anything below here!
@@ -91,3 +89,12 @@ gx = [[0, 1, 0, 0, 1, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0]]
 
 print vertex_cover_tree(gx), "(expect 3)"
+
+gy = [[0, 0, 0, 0, 1, 1], 
+      [0, 0, 1, 0, 0, 0], 
+      [0, 1, 0, 0, 0, 1], 
+      [0, 0, 0, 0, 0, 0], 
+      [1, 0, 0, 0, 0, 1], 
+      [1, 0, 1, 0, 1, 0]]
+
+print vertex_cover_tree(gy), "(expect 3)"
