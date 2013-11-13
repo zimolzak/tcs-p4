@@ -18,26 +18,36 @@ def recursive_vertex_cover(input_graph, assignment):
     #   might still be vertices that are unassigned - but, as you learned
     #   in the course, it's straightforward to tell if these should
     #   count as a 1 or a 0.)
-    covered = 0
-    edges = 0
-    print assignment
+    u = None
+    v = None
     for i in range(0, len(input_graph)):
         for j in range(i+1, len(input_graph[i])):
-            edges = edges + input_graph[i][j]
-            covered = covered + input_graph[i][j] * ((assignment[i]==1) or (assignment[j]==1)) #NB x==1.
-    if None in assignment:
-        u = assignment.index(None)
-        assignment[u] = 666 #temp value so X.index() returns next idx of None
-        if None in assignment:
-            v = assignment.index(None)
-        else:
-            v = u
-    elif covered < edges:
-        return float("inf")
-    elif covered == edges:
+            if input_graph[i][j] and assignment[i]==0 and assignment[j]==0:
+                # fail fast
+                return float("inf")
+    for i in range(0, len(input_graph)):
+        for j in range(i+1, len(input_graph[i])):
+            if input_graph[i][j] and assignment[i]==None and assignment[j]==None:
+                # u and v connect, therefore do 3-way branch
+                u = i
+                v = j
+    if u==None:
+        # do the straightforward remaining assignments
+        while None in assignment:
+            i = assignment.index(None) # i is the index of the unassigned vtx we are checking.
+            num_neighbors = 0
+            for j in range(len(input_graph)): # j is the index of the neighbor we are checking.
+                if input_graph[i][j] == 0: # no edge betw Vtx and Neighbor
+                    continue
+                num_neighbors += 1
+                if assignment[j] == 1: # There is an edge and it is covered by Neighbor
+                    assignment[i] = 0
+            if assignment[i] == None: # Vtx remains unassigned after checking all Neighbors
+                if num_neighbors == 0:
+                    assignment[i] = 0
+                else:
+                    assignment[i] = 1
         return sum(assignment)
-    else:
-        raise
     # END OF YOUR CODE. The following code takes care of the recursive
     # branching. Do not modify anything below here!
     assignment[u] = 1
