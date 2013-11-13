@@ -25,7 +25,12 @@ def recursive_vertex_cover(input_graph, assignment):
             edges = edges + input_graph[i][j]
             covered = covered + input_graph[i][j] * ((assignment[i]==1) or (assignment[j]==1)) #NB x==1.
     if None in assignment:
-        v = assignment.index(None)
+        u = assignment.index(None)
+        assignment[u] = 666 #temp value so X.index() returns next idx of None
+        if None in assignment:
+            v = assignment.index(None)
+        else:
+            v = u
     elif covered < edges:
         return float("inf")
     elif covered == edges:
