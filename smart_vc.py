@@ -20,6 +20,7 @@ def recursive_vertex_cover(input_graph, assignment):
     #   count as a 1 or a 0.)
     covered = 0
     edges = 0
+    print assignment
     for i in range(0, len(input_graph)):
         for j in range(i+1, len(input_graph[i])):
             edges = edges + input_graph[i][j]
@@ -69,3 +70,14 @@ def test():
     assert 3 == vertex_cover_tree(g4)
 
 test()
+
+gx = [[0, 1, 0, 0, 1, 0, 0, 1],
+      [1, 0, 1, 0, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 1, 0, 0, 0],
+      [1, 0, 0, 1, 0, 0, 1, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 1, 0, 1, 0, 0, 0],
+      [1, 0, 0, 0, 0, 0, 0, 0]]
+
+print vertex_cover_tree(gx), "(expect 3)"
