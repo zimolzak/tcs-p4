@@ -5,6 +5,8 @@
 def vertex_cover_tree(input_graph):
     n = len(input_graph)
     assignment = [None]*n
+    # print
+    # print
     return recursive_vertex_cover(input_graph, assignment)
 
 def recursive_vertex_cover(input_graph, assignment):
@@ -20,32 +22,39 @@ def recursive_vertex_cover(input_graph, assignment):
     #   count as a 1 or a 0.)
     u = None
     v = None
+    indent = len(assignment) - assignment.count(None)
+    # print " " * indent, assignment
     for i in range(0, len(input_graph)):
         for j in range(i+1, len(input_graph[i])):
             if input_graph[i][j] and assignment[i]==0 and assignment[j]==0:
                 # fail fast
+                # print " " * indent, "fail"
                 return float("inf")
     for i in range(0, len(input_graph)):
         for j in range(i+1, len(input_graph[i])):
             if input_graph[i][j] and assignment[i]==None and assignment[j]==None:
                 # u and v connect, therefore do 3-way branch
-                if not u==None: # if we found an appropriate pair, don't keep looking
+                if not (u==None): # if we found an appropriate pair, don't keep looking
                     continue
+                # print " " * indent, "branch"
                 u = i
                 v = j
     if u==None:
-        # do the straightforward remaining assignments
-        while None in assignment:
-            i = assignment.index(None) # i is the index of the unassigned vtx we are checking.
-            num_neighbors = 0
+        # do the straightforward remaining assignments, but count ONLY. Don't actually assign.
+        # print " " * indent, "straight"
+        extra_assign_count = 0
+        for i in range(len(assignment)): # i is the index of the Vtx we are checking.
+            any_uncov_neigh = 0
+            if not (assignment[i]==None): # skip any assigned Vtx.
+                continue
             for j in range(len(input_graph)): # j is the index of the neighbor we are checking.
-                if input_graph[i][j] == 0: # no edge betw Vtx and Neighbor
+                if input_graph[i][j] == 0 or any_uncov_neigh: # skip if no edge betw Vtx and Neighbor.
                     continue
                 if assignment[j] == 0: # There is an edge and it is UNcovered by Neighbor
-                    assignment[i] = 1
-            if assignment[i] == None: # Vtx remains unassigned because all edges IF PRESENT are covered
-                assignment[i] = 0
-        return sum(assignment)
+                    any_uncov_neigh = 1
+            extra_assign_count += any_uncov_neigh
+        # print " " * indent, "    ==", assignment.count(1) + extra_assign_count
+        return assignment.count(1) + extra_assign_count # do not use sum() or else you'll sum up NoneTypes
     # END OF YOUR CODE. The following code takes care of the recursive
     # branching. Do not modify anything below here!
     assignment[u] = 1
@@ -98,3 +107,14 @@ gy = [[0, 0, 0, 0, 1, 1],
       [1, 0, 1, 0, 1, 0]]
 
 print vertex_cover_tree(gy), "(expect 3)"
+
+gz = [[0, 0, 0, 0, 1, 0, 1, 0], 
+      [0, 0, 0, 0, 0, 0, 0, 0], 
+      [0, 0, 0, 0, 1, 0, 0, 0], 
+      [0, 0, 0, 0, 1, 0, 0, 0], 
+      [1, 0, 1, 1, 0, 0, 1, 0], 
+      [0, 0, 0, 0, 0, 0, 0, 1], 
+      [1, 0, 0, 0, 1, 0, 0, 0], 
+      [0, 0, 0, 0, 0, 1, 0, 0]]
+
+print vertex_cover_tree(gz)
