@@ -1,22 +1,19 @@
-#
 # This and the next problem are mainly concerned with implementing the
 # improved search tree for vertex cover. But before we do any
 # improvements, let's implement the brute-force algorithm (the one
 # with size 2^n) first before doing further optimizations.
 #
 # Write code in recursive_vertex_cover where specified.
-#
-
 
 # This function initializes and calls the search tree
 def vertex_cover_tree(input_graph):
     n = len(input_graph)
     assignment = [None]*n
-    for row in input_graph:
-        print row
-    sz = recursive_vertex_cover(input_graph, assignment)
-    print "size", sz
-    return sz
+    # for row in input_graph:
+    #    print row
+    size = recursive_vertex_cover(input_graph, assignment)
+    # print "size", size
+    return size
 
 # My function - AJZ
 # True if a valid cover.
@@ -30,15 +27,15 @@ def validity_check(graph, cover):
         for j in range(i+1, len(graph[i])):
             edges = edges + graph[i][j]
             covered = covered + graph[i][j] * ((cover[i]==1) or (cover[j]==1)) #NB x==1. Be prepared for None values.
-    print "cov", covered, "of", edges, "with..."
+    # print "cov", covered, "of", edges, "with..."
     if None in cover:
-        print "indeter", cover
+        # print "indeter", cover
         return None
     elif covered < edges:
-        print "INV_ins", cover
+        # print "INV_ins", cover
         return False
     elif covered == edges:
-        print "  valid", cover
+        # print "  valid", cover
         return True
     else:
         raise #fixme How do I do this correctly?
@@ -86,8 +83,7 @@ def test():
          [1, 1, 1, 1, 0]]
     assert 1 == vertex_cover_tree(g1)
     assert 1 == vertex_cover_tree(g2)
-    vertex_cover_tree(g4)
-    #assert 3 == vertex_cover_tree(g4)
-
+    # vertex_cover_tree(g4)
+    assert 3 == vertex_cover_tree(g4)
 
 test()
