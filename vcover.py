@@ -27,11 +27,8 @@ def validity_check(graph, cover):
     covered = 0
     edges = 0
     for i in range(0, len(graph)):
-        edges = edges + sum(graph[i][i+1:len(graph)])
         for j in range(i+1, len(graph[i])):
-            if cover[i]==0 and cover[j]==0:
-                print "INV_sur", cover #FIXME too aggressive
-                return False
+            edges = edges + graph[i][j]
             covered = covered + graph[i][j] * ((cover[i]==1) or (cover[j]==1)) #NB x==1. Be prepared for None values.
     print "cov", covered, "of", edges, "with..."
     if None in cover:
