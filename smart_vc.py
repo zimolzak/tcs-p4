@@ -30,7 +30,7 @@ def recursive_vertex_cover(input_graph, assignment):
                 # fail fast
                 # print " " * indent, "fail"
                 return float("inf")
-    for i in range(0, len(input_graph)):
+    for i in range(0, len(input_graph)): # second loop because I want to faily REALLY fast, finding ALL invalids.
         for j in range(i+1, len(input_graph[i])):
             if input_graph[i][j] and assignment[i]==None and assignment[j]==None:
                 # u and v connect, therefore do 3-way branch
