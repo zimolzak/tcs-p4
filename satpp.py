@@ -25,11 +25,17 @@
 # return the remaining clauses.
 
 def sat_preprocessing(num_variables, clauses):
-    # YOUR CODE HERE
+    assignment = [None] * num_variables
+    for row in clauses:
+        if len(row)==1:
+            return [1,-1]
+            #assignment[abs(row[0])] = (row[0] < 0)
+    print assignment
     return [1,-1]
 
 def test():
     assert [] == sat_preprocessing(1, [[1]])
+
     assert [[1,-1]] == sat_preprocessing(1, [[1], [-1]])
 
     assert [] == sat_preprocessing(4,[[4], 
@@ -66,4 +72,48 @@ def test():
                                         [-1, -5, 2, 3], 
                                         [-3, 2, -5, 6, -4]])
 
-test()
+# test()
+
+s1 = [[1]]
+
+s2 = [[1], [-1]]
+
+s4 = [[4], 
+      [-3, -1], 
+      [3, -4, 2, 1], 
+      [1, -3, 4],
+      [-1, -3, -4, 2], 
+      [4, 3, 1, 2], 
+      [4, 3],
+      [1, 3, -4], 
+      [3, -4, 1], 
+      [-1]]
+
+s5 = [[4, -2], 
+      [-1, -2], 
+      [1], 
+      [-4],
+      [5, 1, 4, -2, 3], 
+      [-1, 2, 3, 5],
+      [-3, -1], 
+      [-4], 
+      [4, -1, 2]]
+    
+ans = [[5, 6, 2, 4], 
+       [3, 5, 2, 4], 
+       [-5, 2, 3], 
+       [-3, 2, -5, 6, -4]]
+
+s6 = [[-5, 3, 2, 6, 1], 
+      [5, 6, 2, 4],
+      [3, 5, 2, -1, 4], 
+      [1], 
+      [2, 1, 4, 3, 6],
+      [-1, -5, 2, 3], 
+      [-3, 2, -5, 6, -4]]
+
+print sat_preprocessing(1, s1), "expect []"
+print sat_preprocessing(1, s2), "expect [[1,-1]]"
+print sat_preprocessing(4, s4), "expect []"
+print sat_preprocessing(5, s5), "expect [[1,-1]]"
+print sat_preprocessing(6, s6), "expect", ans
