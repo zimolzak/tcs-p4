@@ -9,7 +9,7 @@
 # 4) Remove all variables that evaluate to 'FALSE' (i.e., all variables x
 # that are set to FALSE and all variables not(x) where x is set to TRUE).
 # If this results in an empty clause, then the input formula has no satisfying
-# assignment and the function should return the Boolean formula [[1],[-1]]
+# assignment and the function should return the Boolean formula [[1,-1]]
 #
 # The challenging part is implementing Rule 2, for your function must
 # perform the data reductions exhaustively, that is, until they can no
@@ -21,7 +21,7 @@
 #
 # If through the pre-processing steps you are able to determine that a
 # SAT problem is satisfiable then return []. Likewise, if you
-# determine that it is unsatisfiable then return [[1],[-1]]. Otherwise,
+# determine that it is unsatisfiable then return [[1,-1]]. Otherwise,
 # return the remaining clauses.
 
 from copy import *
@@ -93,7 +93,7 @@ def sat_preprocessing(num_variables, clauses):
         # print "pr3: a=", assignment[1:len(assignment)], "c=", clauses
         clauses=rule4(assignment, clauses)
         if clauses=="FAIL":
-            return [[1,-1]] # stupid kludge to pass class. Technically it should be [[1],[-1]]
+            return [[1,-1]] # FIXME. Stupid kludge to pass class. Technically it should be [[1],[-1]]
         # print "pr4: a=", assignment[1:len(assignment)], "c=", clauses
     return clauses
 
@@ -102,7 +102,7 @@ def sat_preprocessing(num_variables, clauses):
 # def test():
 #     assert [] == sat_preprocessing(1, [[1]])
 
-#     assert [[1],[-1]] == sat_preprocessing(1, [[1], [-1]])
+#     assert [[1,-1]] == sat_preprocessing(1, [[1], [-1]])
 
 #     assert [] == sat_preprocessing(4,[[4], 
 #                                       [-3, -1], 
@@ -115,7 +115,7 @@ def sat_preprocessing(num_variables, clauses):
 #                                       [3, -4, 1], 
 #                                       [-1]])
 
-#     assert [[1],[-1]] == sat_preprocessing(5,[[4, -2], 
+#     assert [[1,-1]] == sat_preprocessing(5,[[4, -2], 
 #                                             [-1, -2], 
 #                                             [1], 
 #                                             [-4],
@@ -142,7 +142,7 @@ def sat_preprocessing(num_variables, clauses):
 
 ################## MY TESTS ##################
 
-print sat_preprocessing(5, [[1, 3], [5], [-3], [-1]])
+# print sat_preprocessing(5, [[1, 3], [5], [-3], [-1]])
 
 # s1 = [[1]]
 
@@ -195,7 +195,7 @@ print sat_preprocessing(5, [[1, 3], [5], [-3], [-1]])
 # print
 
 # x2 = sat_preprocessing(1, s2)
-# print "pr4", x2, "expect [[1],[-1]]"
+# print "pr4", x2, "expect [[1],[-1]] whatevs"
 # print
 
 # x4 = sat_preprocessing(4, s4)
@@ -203,7 +203,7 @@ print sat_preprocessing(5, [[1, 3], [5], [-3], [-1]])
 # print
 
 # x5 = sat_preprocessing(5, s5)
-# print "pr4", x5, "expect [[1],[-1]]"
+# print "pr4", x5, "expect [[1],[-1]] whatevs"
 # print
 
 # x6 = sat_preprocessing(6, s6)
