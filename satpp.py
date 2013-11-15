@@ -77,132 +77,134 @@ def rule4(assignment, clauses):
 
 def sat_preprocessing(num_variables, clauses):
     assignment = [None] * (num_variables + 1) # assignment[0] is dummy
-    print "****"
+    # print "****"
     oa=0
     oc=0
     while not (oa==assignment and oc==clauses): # (oa[1:len(oa)] == assignment[1:len(assignment)])
         oa=deepcopy(assignment)
         oc=deepcopy(clauses)
-        print
-        print "ini: a=", assignment[1:len(assignment)], "c=", clauses
+        # print
+        # print "ini: a=", assignment[1:len(assignment)], "c=", clauses
         assignment=rule1(assignment, clauses)
-        print "pr1: a=", assignment[1:len(assignment)], "c=", clauses
+        # print "pr1: a=", assignment[1:len(assignment)], "c=", clauses
         assignment=rule2(assignment, clauses)
-        print "pr2: a=", assignment[1:len(assignment)], "c=", clauses
+        # print "pr2: a=", assignment[1:len(assignment)], "c=", clauses
         clauses=rule3(assignment, clauses)
-        print "pr3: a=", assignment[1:len(assignment)], "c=", clauses
+        # print "pr3: a=", assignment[1:len(assignment)], "c=", clauses
         clauses=rule4(assignment, clauses)
-        print "pr4: a=", assignment[1:len(assignment)], "c=", clauses
+        # print "pr4: a=", assignment[1:len(assignment)], "c=", clauses
     return clauses
 
-s1 = [[1]]
-s2 = [[1], [-1]]
+################## HIS TESTS ##################
 
-s_sing = [[-2], 
-          [-1, -2], 
-          [1], 
-          [5, 1, -2, 3], 
-          [-1, 2, 3, 5],
-          [-3, -1], 
-          [4, -1, 2]] #x4 apears just once
+def test():
+    assert [] == sat_preprocessing(1, [[1]])
 
+    assert [[1],[-1]] == sat_preprocessing(1, [[1], [-1]])
 
+    assert [] == sat_preprocessing(4,[[4], 
+                                      [-3, -1], 
+                                      [3, -4, 2, 1], 
+                                      [1, -3, 4],
+                                      [-1, -3, -4, 2], 
+                                      [4, 3, 1, 2], 
+                                      [4, 3],
+                                      [1, 3, -4], 
+                                      [3, -4, 1], 
+                                      [-1]])
 
-
-# def test():
-#     assert [] == sat_preprocessing(1, [[1]])
-
-#     assert [[1],[-1]] == sat_preprocessing(1, [[1], [-1]])
-
-#     assert [] == sat_preprocessing(4,[[4], 
-#                                       [-3, -1], 
-#                                       [3, -4, 2, 1], 
-#                                       [1, -3, 4],
-#                                       [-1, -3, -4, 2], 
-#                                       [4, 3, 1, 2], 
-#                                       [4, 3],
-#                                       [1, 3, -4], 
-#                                       [3, -4, 1], 
-#                                       [-1]])
-
-#     assert [[1],[-1]] == sat_preprocessing(5,[[4, -2], 
-#                                             [-1, -2], 
-#                                             [1], 
-#                                             [-4],
-#                                             [5, 1, 4, -2, 3], 
-#                                             [-1, 2, 3, 5],
-#                                             [-3, -1], 
-#                                             [-4], 
-#                                             [4, -1, 2]])
+    assert [[1],[-1]] == sat_preprocessing(5,[[4, -2], 
+                                            [-1, -2], 
+                                            [1], 
+                                            [-4],
+                                            [5, 1, 4, -2, 3], 
+                                            [-1, 2, 3, 5],
+                                            [-3, -1], 
+                                            [-4], 
+                                            [4, -1, 2]])
     
-#     ans = [[5, 6, 2, 4], 
-#            [3, 5, 2, 4], 
-#            [-5, 2, 3], 
-#            [-3, 2, -5, 6, -4]]
+    ans = [[5, 6, 2, 4], 
+           [3, 5, 2, 4], 
+           [-5, 2, 3], 
+           [-3, 2, -5, 6, -4]]
     
-#     assert ans == sat_preprocessing(6, [[-5, 3, 2, 6, 1], 
-#                                         [5, 6, 2, 4],
-#                                         [3, 5, 2, -1, 4], 
-#                                         [1], 
-#                                         [2, 1, 4, 3, 6],
-#                                         [-1, -5, 2, 3], 
-#                                         [-3, 2, -5, 6, -4]])
+    assert ans == sat_preprocessing(6, [[-5, 3, 2, 6, 1], 
+                                        [5, 6, 2, 4],
+                                        [3, 5, 2, -1, 4], 
+                                        [1], 
+                                        [2, 1, 4, 3, 6],
+                                        [-1, -5, 2, 3], 
+                                        [-3, 2, -5, 6, -4]])
 
-# test()
+test()
 
-s4 = [[4], 
-      [-3, -1], 
-      [3, -4, 2, 1], 
-      [1, -3, 4],
-      [-1, -3, -4, 2], 
-      [4, 3, 1, 2], 
-      [4, 3],
-      [1, 3, -4], 
-      [3, -4, 1], 
-      [-1]]
+################## MY TESTS ##################
 
-s5 = [[4, -2], 
-      [-1, -2], 
-      [1], 
-      [-4],
-      [5, 1, 4, -2, 3], 
-      [-1, 2, 3, 5],
-      [-3, -1], 
-      [-4], 
-      [4, -1, 2]]
+# s1 = [[1]]
+
+# s2 = [[1], [-1]]
+
+# s_sing = [[-2], 
+#           [-1, -2], 
+#           [1], 
+#           [5, 1, -2, 3], 
+#           [-1, 2, 3, 5],
+#           [-3, -1], 
+#           [4, -1, 2]] #x4 apears just once
+
+# s4 = [[4], 
+#       [-3, -1], 
+#       [3, -4, 2, 1], 
+#       [1, -3, 4],
+#       [-1, -3, -4, 2], 
+#       [4, 3, 1, 2], 
+#       [4, 3],
+#       [1, 3, -4], 
+#       [3, -4, 1], 
+#       [-1]]
+
+# s5 = [[4, -2], 
+#       [-1, -2], 
+#       [1], 
+#       [-4],
+#       [5, 1, 4, -2, 3], 
+#       [-1, 2, 3, 5],
+#       [-3, -1], 
+#       [-4], 
+#       [4, -1, 2]]
     
-ans = [[5, 6, 2, 4], 
-       [3, 5, 2, 4], 
-       [-5, 2, 3], 
-       [-3, 2, -5, 6, -4]]
+# ans = [[5, 6, 2, 4], 
+#        [3, 5, 2, 4], 
+#        [-5, 2, 3], 
+#        [-3, 2, -5, 6, -4]]
 
-s6 = [[-5, 3, 2, 6, 1], 
-      [5, 6, 2, 4],
-      [3, 5, 2, -1, 4], 
-      [1], 
-      [2, 1, 4, 3, 6],
-      [-1, -5, 2, 3], 
-      [-3, 2, -5, 6, -4]]
+# s6 = [[-5, 3, 2, 6, 1], 
+#       [5, 6, 2, 4],
+#       [3, 5, 2, -1, 4], 
+#       [1], 
+#       [2, 1, 4, 3, 6],
+#       [-1, -5, 2, 3], 
+#       [-3, 2, -5, 6, -4]]
 
-x1 = sat_preprocessing(1, s1)
-print "pr4", x1, "expect []"
-print
+# x1 = sat_preprocessing(1, s1)
+# print "pr4", x1, "expect []"
+# print
 
-x2 = sat_preprocessing(1, s2)
-print "pr4", x2, "expect [[1],[-1]]"
-print
+# x2 = sat_preprocessing(1, s2)
+# print "pr4", x2, "expect [[1],[-1]]"
+# print
 
-x4 = sat_preprocessing(4, s4)
-print "pr4", x4, "expect []"
-print
+# x4 = sat_preprocessing(4, s4)
+# print "pr4", x4, "expect []"
+# print
 
-x5 = sat_preprocessing(5, s5)
-print "pr4", x5, "expect [[1],[-1]]"
-print
+# x5 = sat_preprocessing(5, s5)
+# print "pr4", x5, "expect [[1],[-1]]"
+# print
 
-x6 = sat_preprocessing(6, s6)
-print "pr4", x6, "expect", ans
-print
+# x6 = sat_preprocessing(6, s6)
+# print "pr4", x6, "expect", ans
+# print
 
-xs = sat_preprocessing(5, s_sing)
-print "pr4", xs, "expect ?"
+# xs = sat_preprocessing(5, s_sing)
+# print "pr4", xs, "expect ?"
