@@ -24,6 +24,8 @@
 # determine that it is unsatisfiable then return [[1],[-1]]. Otherwise,
 # return the remaining clauses.
 
+from copy import *
+
 def rule1(assignment, clauses):
     for row in clauses:
         if len(row)==1: #rule1
@@ -50,8 +52,10 @@ def rule3(assignment, clauses):
         for j in range(len(clauses[i])):
             if clauses[i] == "sat":
                 continue
-            if assignment[abs(clauses[i][j])]==True:
+            if assignment[abs(clauses[i][j])]==True and clauses[i][j] > 0:
                 clauses[i] = "sat" # don't delete right away or it screws up index counting
+            elif assignment[abs(clauses[i][j])]==False and clauses[i][j] < 0:
+                clauses[i] = "sat"
     while "sat" in clauses:
         clauses.remove("sat")
     return clauses
@@ -61,9 +65,9 @@ def rule4(assignment, clauses):
         if assignment[var_num] == None:
             continue
         elif assignment[var_num] == False:
-            val_to_remove = -1 * var_num
+            val_to_remove = 1 * var_num
         elif assignment[var_num] == True:
-            val_to_remove = var_num
+            val_to_remove = -1 * var_num
         for row in clauses:
             while val_to_remove in row:
                 row.remove(val_to_remove)
@@ -73,21 +77,22 @@ def rule4(assignment, clauses):
 
 def sat_preprocessing(num_variables, clauses):
     assignment = [None] * (num_variables + 1) # assignment[0] is dummy
-    exhausted = 0
-
-    assignment=rule1(assignment, clauses)
-
-    assignment=rule2(assignment, clauses)
-
-    clauses=rule3(assignment, clauses)
-
-    clauses=rule4(assignment, clauses)
-
-    # oldass=ass
-    # ass=rule(ass,clau)
-    # if oldass[1:len(oldass)] == ass[1:len(ass)]:
-    #     then we are unchanged
-            
+    print "****"
+    oa=0
+    oc=0
+    while not (oa==assignment and oc==clauses): # (oa[1:len(oa)] == assignment[1:len(assignment)])
+        oa=deepcopy(assignment)
+        oc=deepcopy(clauses)
+        print
+        print "ini: a=", assignment[1:len(assignment)], "c=", clauses
+        assignment=rule1(assignment, clauses)
+        print "pr1: a=", assignment[1:len(assignment)], "c=", clauses
+        assignment=rule2(assignment, clauses)
+        print "pr2: a=", assignment[1:len(assignment)], "c=", clauses
+        clauses=rule3(assignment, clauses)
+        print "pr3: a=", assignment[1:len(assignment)], "c=", clauses
+        clauses=rule4(assignment, clauses)
+        print "pr4: a=", assignment[1:len(assignment)], "c=", clauses
     return clauses
 
 s1 = [[1]]
@@ -101,9 +106,6 @@ s_sing = [[-2],
           [-3, -1], 
           [4, -1, 2]] #x4 apears just once
 
-print "rule2 test"
-
-sat_preprocessing(5, s_sing)
 
 
 
@@ -182,8 +184,25 @@ s6 = [[-5, 3, 2, 6, 1],
       [-1, -5, 2, 3], 
       [-3, 2, -5, 6, -4]]
 
-print sat_preprocessing(1, s1), "expect []"
-print sat_preprocessing(1, s2), "expect [[1],[-1]]"
-print sat_preprocessing(4, s4), "expect []"
-print sat_preprocessing(5, s5), "expect [[1],[-1]]"
-print sat_preprocessing(6, s6), "expect", ans
+x1 = sat_preprocessing(1, s1)
+print "pr4", x1, "expect []"
+print
+
+x2 = sat_preprocessing(1, s2)
+print "pr4", x2, "expect [[1],[-1]]"
+print
+
+x4 = sat_preprocessing(4, s4)
+print "pr4", x4, "expect []"
+print
+
+x5 = sat_preprocessing(5, s5)
+print "pr4", x5, "expect [[1],[-1]]"
+print
+
+x6 = sat_preprocessing(6, s6)
+print "pr4", x6, "expect", ans
+print
+
+xs = sat_preprocessing(5, s_sing)
+print "pr4", xs, "expect ?"
